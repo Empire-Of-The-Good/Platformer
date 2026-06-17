@@ -1,0 +1,23 @@
+# Python (кэш и временные файлы)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Виртуальное окружение
+venv/
+.venv/
+ENV/
+env/
+
+# Сборка PyInstaller (папки, которые создаются при запуске вашего .bat скрипта)
+build/
+dist/
+*.spec
+
+# Логи и отчеты об ошибках
+*.log
+
+# Временные файлы операционных систем
+.DS_Store
+Thumbs.db
