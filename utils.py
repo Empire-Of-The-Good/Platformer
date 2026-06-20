@@ -7,7 +7,12 @@ def load_map(file_name="level_data.json"):
         with open(file_name, "r") as file:
             level_map = json.load(file)
     except FileNotFoundError:
-        clear_map = {1: {"floor": [[0,500], [100,500], [200,500], [300,500], [400,500], [500,500], [600,500], [700,500]], "lava": [[400,500]]}}
+        clear_map = {
+            1: {
+                "floor": [[0, 320], [64, 320], [128, 320], [192, 320], [256, 320], [320, 320], [384, 320], [448, 320]], 
+                "lava": [[256, 320]]
+            }
+        }        
     else:
         for key, value in level_map.items():
             clear_map[int(key)] = value
