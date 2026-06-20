@@ -31,7 +31,7 @@ class Lava(Block):
         
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, name, path_to_img, pos, resize=(100, 250)):
+    def __init__(self, name, path_to_img, pos, resize=(48, 96)):
         super().__init__()
         self.name = name
         self.left_sprite = load_img(path_to_img, resize)
