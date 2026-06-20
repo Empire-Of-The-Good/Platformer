@@ -47,7 +47,12 @@ class Player(pygame.sprite.Sprite):
 
     def reset(self):
         self.rect.left = 0
-        self.rect.bottom = 400
+        self.rect.bottom = 100
+
+    def hits_lava(self, lava):
+        if pygame.sprite.spritecollide(self, lava, False):
+            return True
+        return False
 
     def update(self, platform): 
         floor = pygame.sprite.Group()
@@ -72,10 +77,14 @@ class Player(pygame.sprite.Sprite):
             self.velocity_x = -self.speed_x
         
         self.rect.left += self.velocity_x
-        if self.rect.left <= 0:
-            self.rect.left = 0
+
+
+        if self.hits_lava(lava):
+            self.reset()
+            return
         
         hits_x_floor = pygame.sprite.spritecollide(self, floor, False)
+
         for block in hits_x_floor:
             if block.rect.top >= self.rect.bottom - self.gravity:
                 continue
@@ -84,16 +93,16 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity_x < 0:
                 self.rect.left = block.rect.right
         
-        if pygame.sprite.spritecollide(self, lava, False):
-            self.reset()
-            return
-
+        # РАБОТА С ОСЬЮ Y
         if keys[pygame.K_w] and self.can_jump:
             self.velocity_y = self.jump_power
-            self.can_jump = False
 
         self.velocity_y += self.gravity
         self.rect.bottom += self.velocity_y
+
+        if self.hits_lava(lava):
+            self.reset()
+            return
 
         self.can_jump = False
         hits_y_floor = pygame.sprite.spritecollide(self, floor, False)
@@ -106,7 +115,3 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity_y < 0:
                 self.rect.top = block.rect.bottom
                 self.velocity_y = 0
-
-        if pygame.sprite.spritecollide(self, lava, False):
-            self.reset()
-            return
