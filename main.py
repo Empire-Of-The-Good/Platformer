@@ -6,8 +6,8 @@ from classes import Player, Floor, Lava, Button
 from utils import load_img, load_map, output, middle, import_map
 
 pygame.init()
-width = 800
-height = 600
+width = 832
+height = 640
 FPS = 60
 clock = pygame.time.Clock()
 
@@ -53,11 +53,11 @@ for key in map_levels.keys():
 
 # ================ GAME ================
 sky = load_img("assets/sky.png")
-player = Player(name, f"assets/{name}.png", (100, 200), resize=(100, 220))
-player.rect.bottom = 500
+player = Player(name, f"assets/{name}.png", (100, 200))
+player.rect.top = 0
 platform = pygame.sprite.Group()
 level_map = map_levels[level]
-root = False
+root = True
 proris_map = False
 
 # ================ MAIN ================
@@ -99,7 +99,7 @@ while running:
                         proris_map = False
                         level = int(button.text)
                         level_map = map_levels[level]
-                        player.rect.left = 0
+                        player.reset()
                         game_state = "game"
             screen.fill((0, 0, 0))
             buttons_levels.draw(screen)
@@ -117,16 +117,17 @@ while running:
                     import_map(platform.sprites(), level)
             elif event.type == pygame.MOUSEBUTTONDOWN and root:
                 x, y = event.pos
-                x, y = str(x).zfill(3)[0] + "00", str(y).zfill(3)[0] + "00"
+                x = x // 64 * 64
+                y = y // 64 * 64
 
                 if event.button == 1:
-                    platform.add(Floor((int(x), int(y))))
+                    platform.add(Floor((x, y)))
                 elif event.button == 2:
                     all_floors = platform.sprites()
                     first_floor = all_floors[-1]
                     platform.remove(first_floor)
                 else:
-                    platform.add(Lava((int(x), int(y))))
+                    platform.add(Lava((x, y)))
 
         if proris_map is False:
             floors = level_map["floor"]
@@ -141,6 +142,8 @@ while running:
                 
         if player.rect.left >= width:
             game_state = "levels"
+        if player.rect.top >= height:
+            player.rect.top = 0
 
         platform.draw(screen)
         player.update(platform)
