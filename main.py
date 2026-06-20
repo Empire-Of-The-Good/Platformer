@@ -66,12 +66,12 @@ running = True
 
 while running:
     clock.tick(FPS)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    if game_state == "menu":
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        if game_state == "menu":
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 for button in buttons:
                     if button.rect.collidepoint(event.pos):
                         if button.text == "start":
@@ -80,37 +80,28 @@ while running:
                             game_state = "setting"
                         elif button.text == "EXIT":
                             running = False
-            
+
             screen.blit(background, (0, 0))
             buttons.draw(screen)
-        
             
-    elif game_state == "levels":
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    game_state = "menu"
+        elif game_state == "levels":
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                game_state = "menu"
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for button in buttons_levels:
                     if button.rect.collidepoint(event.pos):
                         platform.empty()
+                        level_map = map_levels[int(button.text)]
                         proris_map = False
-                        level = int(button.text)
-                        level_map = map_levels[level]
                         player.rect.left = 0
                         game_state = "game"
             screen.fill((0, 0, 0))
             buttons_levels.draw(screen)
 
-    elif game_state == "settings":
-        pass #settings()
-    elif game_state == "game":
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
+        elif game_state == "settings":
+            pass #settings()
+        elif game_state == "game":
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     game_state = "levels"
                 elif event.key == pygame.K_RETURN and root:
@@ -128,6 +119,7 @@ while running:
                 else:
                     platform.add(Lava((int(x), int(y))))
 
+    if game_state == "game":
         if proris_map is False:
             floors = level_map["floor"]
             lavas = level_map["lava"] 

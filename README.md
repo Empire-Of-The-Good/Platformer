@@ -6,7 +6,7 @@
 
 **Динамичный 2D-платформер с кучей уровней, монеток и скрытых отсылок!**
 
-[![Version 1.0.0](https://img.shields.io/badge/version-0.1.0-red.svg)](https://github.com/python3demon/Platformer)
+[![Version 1.0.0](https://img.shields.io/badge/version-0.1.0--dev-red.svg)](https://github.com/python3demon/Platformer)
 [![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg?logo=python&logoColor=white)](https://www.python.org/downloads/latest/python3.14/)
 [![Pygame 2.6.1](https://img.shields.io/badge/pygame-2.6.1-yellow.svg)](https://www.pygame.org/)
 [![Linux](https://img.shields.io/badge/platform-linux-A9A9A9.svg?logo=linux&logoColor=white)](https://linux.org)
@@ -15,10 +15,9 @@
 </div>
 
 
-## О игре
+## Об игре
 **Platformer Game** — это классический 2D-платформер на движке Pygame, где вам предстоит пройти сквозь огонь, воду и **67 хардкорных уровней**. Здесь нет заумного лора или драматичного сюжета — только чистый кайф, смешная атмосфера и тонны скрытых пасхалок для внимательных игроков!
 
-### Фичи:
 * **Четкий расчет**: Прыгайте ровно на высоту в 2 блока. Никаких заносов и скольжений, управление отзывчивое как швейцарские часы!
 * **Лазерное шоу**: Враги думали, что вы будете прыгать им на головы? Ха! Выжигайте их издалека мощным лазером.
 * **Внутриигровая экономика**: Собирайте монетки на картах и получайте бонусы за прохождение.
