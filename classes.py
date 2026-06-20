@@ -38,18 +38,23 @@ class Player(pygame.sprite.Sprite):
         self.right_sprite = pygame.transform.flip(self.left_sprite, True, False)
         self.image = self.left_sprite
         self.rect = pygame.Rect(*pos, *self.image.get_size())
-        self.speed_x = 10
+        self.speed_x = 6
         self.velocity_x = 0 # текущая скорость по оси X
         self.velocity_y = 0 # текущая скорость по оси Y
         self.gravity = 1
-        self.jump_power = -16
-        self.on_ground = True
+        self.jump_power = -14
+        self.can_jump = True
 
     def reset(self):
         self.rect.left = 0
-        self.rect.bottom = 400
+        self.rect.bottom = 100
 
-    def update(self, platform): # TODO логику столкновений
+    def hits_lava(self, lava):
+        if pygame.sprite.spritecollide(self, lava, False):
+            return True
+        return False
+
+    def update(self, platform): 
         floor = pygame.sprite.Group()
         lava = pygame.sprite.Group()
 
@@ -72,45 +77,41 @@ class Player(pygame.sprite.Sprite):
             self.velocity_x = -self.speed_x
         
         self.rect.left += self.velocity_x
-        
-        hits_x_lava = pygame.sprite.spritecollide(self, lava, False)
-        hits_x_floor = pygame.sprite.spritecollide(self, floor, False)
 
-        if hits_x_lava:
+
+        if self.hits_lava(lava):
             self.reset()
             return
+        
+        hits_x_floor = pygame.sprite.spritecollide(self, floor, False)
 
         for block in hits_x_floor:
-            if self.velocity_x > 0:
+            if block.rect.top >= self.rect.bottom - self.gravity:
+                continue
+            elif self.velocity_x > 0:
                 self.rect.right = block.rect.left
             elif self.velocity_x < 0:
                 self.rect.left = block.rect.right
         
-
-        if self.rect.left <= 0:
-            self.rect.left = 0
-
-        if keys[pygame.K_w]:
-            if self.on_ground is True:
-                self.velocity_y = self.jump_power
-                self.on_ground = False
+        # РАБОТА С ОСЬЮ Y
+        if keys[pygame.K_w] and self.can_jump:
+            self.velocity_y = self.jump_power
 
         self.velocity_y += self.gravity
         self.rect.bottom += self.velocity_y
 
-        hits_y_lava = pygame.sprite.spritecollide(self, lava, False)
-        hits_y_floor = pygame.sprite.spritecollide(self, floor, False)
-
-        if hits_y_lava:
+        if self.hits_lava(lava):
             self.reset()
             return
 
+        self.can_jump = False
+        hits_y_floor = pygame.sprite.spritecollide(self, floor, False)
+
         for block in hits_y_floor:
             if self.velocity_y > 0:
-                self.velocity_y = 0
                 self.rect.bottom = block.rect.top
-                self.on_ground = True
-            elif self.velocity_y < 0:
                 self.velocity_y = 0
+                self.can_jump = True
+            elif self.velocity_y < 0:
                 self.rect.top = block.rect.bottom
-                self.on_ground = False
+                self.velocity_y = 0
